@@ -1,0 +1,55 @@
+{{- $root := . }}
+{{- $gsb := $root.gsb }}
+# #####################################
+# FILENAME: gsbproxy.sample.tfvars
+# USAGE:
+#   Defines a sample terraform variable values file
+# NOTES:
+#   1. All credentials used in this sample file should be used only in MBB MVP
+#      project
+# #####################################
+
+# =====================================
+# SECTION: azurerm variables
+# =====================================
+
+azurerm_environment     = "{{$gsb.azurerm.env}}"
+azurerm_subscription_id = "{{$gsb.azurerm.subId}}"
+azurerm_tenant_id       = "{{$gsb.azurerm.tenantId}}"
+
+# =====================================
+# SECTION: shared service variables
+# =====================================
+
+shared_service_rg     = "{{$gsb.network.rg}}"
+shared_service_vnet   = "{{$gsb.network.vnet}}"
+shared_service_subnet = "{{$gsb.network.subnet}}"
+
+# =====================================
+# SECTION: gsbproxy variables
+# =====================================
+
+gsbproxy_rg                             = "{{$gsb.gsbProxy.rg}}"
+gsbproxy_location                       = "{{$gsb.gsbProxy.location}}"
+gsbproxy_vmss_name                      = "{{$gsb.gsbProxy.vmssName}}"
+gsbproxy_vmss_username                  = "{{$gsb.gsbProxy.vmssUserName}}"
+gsbproxy_vmss_ssh_pub_key               = "{{$gsb.gsbProxy.vmssSshPubKey}}"
+gsbproxy_vmss_tag_environment           = "{{$gsb.gsbProxy.vmssTagEnv}}"
+gsbproxy_vmss_lb_name                   = "{{$gsb.gsbProxy.vmssLbName}}"
+gsbproxy_vmss_nsg_name                  = "{{$gsb.gsbProxy.vmssNsgName}}"
+gsbproxy_vmss_lb_ip                     = "{{$gsb.gsbProxy.vmssLbIp}}"
+gsbproxy_vmss_dnsserver_ip              = "{{$gsb.gsbProxy.vmssDnsserverIp}}"
+gsbproxy_vmss_autoscale_name            = "{{$gsb.gsbProxy.vmssAutoscaleName}}"
+gsbproxy_vmss_autoscale_location        = "{{$gsb.gsbProxy.vmssAutoscaleLocation}}"
+custom_image_name                       = "{{$gsb.gsbProxy.customImageName}}"
+custom_image_resource_group_name        = "{{$gsb.gsbProxy.customImageResourceGroupName}}"
+
+
+# =====================================
+# SECTION: vault variables
+# =====================================
+
+vault_address        = "address"
+vault_path           = "path"
+vault_role           = "role"
+

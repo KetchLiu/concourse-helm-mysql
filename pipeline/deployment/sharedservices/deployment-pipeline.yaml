@@ -1,0 +1,30 @@
+---
+resource_types:
+- name: helm
+  type: docker-image
+  source:
+    repository: 40.73.69.174/cicd-dev/concourse-helm-resource
+    tag: 'v1.14.3'
+    insecure_registries: [40.73.69.174,10.231.105.8]
+    username: ((USERNAME))
+    password: ((PASSWORD))
+
+
+resources:
+- name: mqtt-helm
+  type: helm
+  source:
+    cluster_url: https://40.73.69.174:6433
+    cluster_ca: ((KUBE_CLUSTER_CA))
+    admin_key: ((ADMIN_KEY))
+    admin_cert: ((ADMIN_CA))
+    repos:
+    - name: mqtt_repo
+      url: https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+jobs:
+  - name: "install_mqtt"
+    plan:
+    - put: mqtt-helm
+      params:
+        chart: stable/mysql
+        version: '5.7.27'

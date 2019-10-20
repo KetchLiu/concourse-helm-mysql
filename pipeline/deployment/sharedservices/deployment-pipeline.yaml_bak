@@ -1,0 +1,34 @@
+---
+resource_types:
+- name: helm
+  type: docker-image
+  source:
+    repository: 10.231.105.8/cicd-dev/concourse-helm:v2.14.3
+resources:
+- name: mqtt-helm
+  type: helm
+  source:
+    cluster_url: https://10.231.105.8:6443
+    cluster_ca: ((KUBE_CLUSTER_CA))
+    admin_key: ((ADMIN_KEY))
+    admin_cert: ((ADMIN_CA))
+jobs:
+  - name: "install_mqtt"
+    plan:
+    - get: mqtt-helm
+    - task: prepare-helm-image-for-mtqq
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source:
+            repository: 10.231.105.8/cicd-dev/concourse-helm
+            tag: 'v2.14.3'
+          params: 
+            chart: stable/mysql
+            cluster_url: https://10.231.105.8:6443
+            cluster_ca: ((KUBE_CLUSTER_CA))
+            admin_key: ((ADMIN_KEY))
+            admin_cert: ((ADMIN_CA))
+        run:
+          path: env

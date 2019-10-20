@@ -1,0 +1,41 @@
+load_module /usr/lib/nginx/modules/ngx_stream_module.so;
+events {
+    worker_connections  1024;
+}
+stream {
+
+    log_format combined '$remote_addr($ssl_preread_server_name) - $upstream_addr: $status $bytes_sent $bytes_received ';
+    access_log /var/log/nginx/stream-access.log combined;
+
+    map $ssl_preread_server_name $name {
+        ~gsbproxy.* ws-gateway-vgc-pre;
+        ~^(pre|app|tui|dmo|dev\d\d\d)\.gsbproxy\..+$ ws-gateway-pfn-pre;
+        www.baidu.com test_site_baidu;
+    }
+
+    upstream ws-gateway-vgc-pre {
+        server ws-gateway-cert-qs.vgc.com.cn:443;
+    }
+	
+    upstream ws-gateway-vgc-prd {
+        server ws-gateway-cert.vgc.com.cn:443;
+    }
+	
+    upstream ws-gateway-pfn-pre {
+        server ws-gateway-cert-qs.pfn.vwg:443;
+    }
+
+    upstream ws-gateway-pfn-prd {
+        server ws-gateway-cert.pfn.vwg:443;
+    }
+	
+    upstream test_site_baidu {
+        server 220.181.38.150:443;
+    }
+
+    server {
+        listen 443;
+        proxy_pass $name;
+        ssl_preread on;
+    }
+}
